@@ -31,7 +31,7 @@ Spine = user outcomes. Each leg names the **place** (what the researcher can do)
 
 **Place:** Follow value forward and backward without drowning in dust.  
 **Enabler:** force-directed graph, min amount, max nodes, tx panel.  
-**Testable now:** Expand in/out; click edge for tx; follow outputs.
+**Testable now:** Expand in/out; click edge for tx; follow outputs; drag nodes to stick layout.
 
 ## Leg 3 — Label what matters · **next**
 

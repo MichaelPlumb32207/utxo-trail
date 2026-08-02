@@ -17,6 +17,7 @@ Priority: P0 blocking · P1 soon · P2 later · P3 wishlist
 | FEAT-008 | P3 | open | Save / share investigation sessions |
 | FEAT-009 | P3 | open | Import external label databases |
 | FEAT-010 | P3 | open | Self-hosted Esplora / node adapter docs + proxy |
+| ENH-005 | P1 | done | Sticky drag layout (fx/fy persist; free on double-click / toolbar) |
 | ENH-001 | P2 | open | Keyboard: `/` focus search, j/k list navigation |
 | ENH-002 | P2 | open | Filter by script type (P2WPKH, P2TR, …) |
 | ENH-003 | P2 | open | Hierarchical layout option (not only force) |

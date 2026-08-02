@@ -4,7 +4,12 @@ import { useCallback, useEffect, useMemo, useRef } from "react";
 import dynamic from "next/dynamic";
 import { useGraphStore } from "@/stores/graphStore";
 import { useLabelsStore } from "@/stores/labelsStore";
-import type { GraphLink, GraphNode, NodeRole } from "@/lib/graph/model";
+import {
+  type GraphLink,
+  type GraphNode,
+  type NodeRole,
+  isLayoutFixed,
+} from "@/lib/graph/model";
 import { formatBtcCompact } from "@/lib/bitcoin/units";
 import { shortAddr } from "@/lib/format";
 
@@ -37,7 +42,12 @@ function linkWidth(l: GraphLink): number {
   return Math.min(6, Math.max(0.5, Math.log10(Math.max(l.valueSats, 1)) - 4));
 }
 
-type FGNode = GraphNode & { x?: number; y?: number; vx?: number; vy?: number };
+type FGNode = GraphNode & {
+  x?: number;
+  y?: number;
+  vx?: number;
+  vy?: number;
+};
 type FGLink = GraphLink & {
   source: string | FGNode;
   target: string | FGNode;
@@ -47,15 +57,23 @@ export function GraphCanvas() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const fgRef = useRef<any>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  /** Suppress click that follows a drag so we don't re-select accidentally. */
+  const draggedRef = useRef(false);
+  /** Double-click → release layout pin. */
+  const lastClickRef = useRef<{ id: string; t: number } | null>(null);
+
   const nodesMap = useGraphStore((s) => s.nodes);
   const linksMap = useGraphStore((s) => s.links);
   const selection = useGraphStore((s) => s.selection);
   const selectAddress = useGraphStore((s) => s.selectAddress);
   const loadTransaction = useGraphStore((s) => s.loadTransaction);
+  const fixNodePosition = useGraphStore((s) => s.fixNodePosition);
+  const releaseNodePosition = useGraphStore((s) => s.releaseNodePosition);
   const labels = useLabelsStore((s) => s.labels);
 
   const graphData = useMemo(() => {
-    const nodes = [...nodesMap.values()];
+    // Include fx/fy from store so user-placed nodes stay put across expands.
+    const nodes = [...nodesMap.values()].map((n) => ({ ...n }));
     const links = [...linksMap.values()].map((l) => ({ ...l }));
     return { nodes, links };
   }, [nodesMap, linksMap]);
@@ -80,7 +98,6 @@ export function GraphCanvas() {
   }, []);
 
   const paintNode = useCallback(
-    // force-graph types are loose; our nodes always carry GraphNode fields.
     (node: object, ctx: CanvasRenderingContext2D, globalScale: number) => {
       const n = node as FGNode;
       const r = nodeRadius(n);
@@ -88,6 +105,7 @@ export function GraphCanvas() {
       const y = n.y ?? 0;
       const isSelected =
         selection?.kind === "address" && selection.id === n.id;
+      const layoutFixed = isLayoutFixed(n);
       const color =
         n.pinned && n.role !== "attacker" && n.role !== "seed"
           ? "#a78bfa"
@@ -98,10 +116,21 @@ export function GraphCanvas() {
       ctx.fillStyle = color;
       ctx.fill();
 
-      if (isSelected || n.pinned) {
-        ctx.strokeStyle = isSelected ? "#f7931a" : "rgba(255,255,255,0.55)";
-        ctx.lineWidth = isSelected ? 2.5 / globalScale : 1.5 / globalScale;
+      if (isSelected || n.pinned || layoutFixed) {
+        if (isSelected) {
+          ctx.strokeStyle = "#f7931a";
+          ctx.lineWidth = 2.5 / globalScale;
+        } else if (layoutFixed) {
+          // Dashed white ring = user placed this node; it will stay put.
+          ctx.strokeStyle = "rgba(255,255,255,0.75)";
+          ctx.lineWidth = 1.75 / globalScale;
+          ctx.setLineDash([3 / globalScale, 2 / globalScale]);
+        } else {
+          ctx.strokeStyle = "rgba(255,255,255,0.55)";
+          ctx.lineWidth = 1.5 / globalScale;
+        }
         ctx.stroke();
+        ctx.setLineDash([]);
       }
 
       const label = labels[n.id] || n.label || shortAddr(String(n.id));
@@ -205,8 +234,46 @@ export function GraphCanvas() {
         linkDirectionalParticles={selectedId ? 2 : 0}
         linkDirectionalParticleWidth={2}
         linkDirectionalParticleColor={() => "#f7931a"}
+        onNodeDrag={() => {
+          draggedRef.current = true;
+        }}
+        onNodeDragEnd={(node) => {
+          const n = node as FGNode;
+          const x = n.x;
+          const y = n.y;
+          if (x == null || y == null) {
+            draggedRef.current = false;
+            return;
+          }
+          // Pin in the live simulation object immediately…
+          n.fx = x;
+          n.fy = y;
+          // …and persist so expands / re-renders don't free it.
+          fixNodePosition(String(n.id), x, y);
+          // Next click event is from mouseup after drag — ignore once.
+          window.setTimeout(() => {
+            draggedRef.current = false;
+          }, 0);
+        }}
         onNodeClick={(node) => {
-          selectAddress((node as GraphNode).id);
+          if (draggedRef.current) return;
+          const n = node as GraphNode;
+          const now = Date.now();
+          const prev = lastClickRef.current;
+          if (prev && prev.id === n.id && now - prev.t < 350) {
+            // Double-click: free the node so the layout can move it again.
+            lastClickRef.current = null;
+            // Clear fx/fy on the live simulation object (store update re-renders).
+            const live = node as FGNode;
+            delete live.fx;
+            delete live.fy;
+            releaseNodePosition(n.id);
+            fgRef.current?.d3ReheatSimulation?.();
+            selectAddress(n.id);
+            return;
+          }
+          lastClickRef.current = { id: n.id, t: now };
+          selectAddress(n.id);
         }}
         onLinkClick={(link) => {
           const l = link as GraphLink;

@@ -1,11 +1,16 @@
 "use client";
 
-const ITEMS: Array<{ color: string; label: string }> = [
+const ITEMS: Array<{ color: string; label: string; dashed?: boolean }> = [
   { color: "var(--node-attacker)", label: "Attacker / flagged" },
   { color: "var(--node-seed)", label: "Seed / pinned start" },
   { color: "var(--node-victim)", label: "Inbound source" },
   { color: "var(--node-external)", label: "External" },
-  { color: "var(--node-pinned)", label: "Pinned" },
+  { color: "var(--node-pinned)", label: "Bookmarked" },
+  {
+    color: "transparent",
+    label: "Placed (drag to stick)",
+    dashed: true,
+  },
 ];
 
 export function Legend() {
@@ -16,8 +21,12 @@ export function Legend() {
         {ITEMS.map((item) => (
           <li key={item.label} className="flex items-center gap-2">
             <span
-              className="inline-block size-2.5 rounded-full ring-1 ring-white/20"
-              style={{ background: item.color }}
+              className={`inline-block size-2.5 rounded-full ${
+                item.dashed
+                  ? "border border-dashed border-white/70 bg-transparent"
+                  : "ring-1 ring-white/20"
+              }`}
+              style={item.dashed ? undefined : { background: item.color }}
             />
             {item.label}
           </li>

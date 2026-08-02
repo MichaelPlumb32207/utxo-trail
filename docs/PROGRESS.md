@@ -2,6 +2,12 @@
 
 Last Updated: 2026-08-02
 
+## 2026-08-02 — Sticky drag layout
+
+- Dragging a node sets force-graph `fx`/`fy` and persists them in the graph store so expands do not free the placement
+- Double-click node or **Free layout** / **Free position** releases fixed coordinates
+- Dashed ring marks user-placed nodes (distinct from investigation bookmark pin)
+
 ## 2026-08-02 — Production deploy
 
 - GitHub: https://github.com/MichaelPlumb32207/utxo-trail (public)

@@ -6,6 +6,7 @@ import {
   ArrowUpRight,
   Copy,
   ExternalLink,
+  Move,
   Pin,
   Tag,
   X,
@@ -16,6 +17,7 @@ import { getAddressUtxos } from "@/lib/api/mempool";
 import type { Utxo } from "@/lib/api/types";
 import { formatBtc, formatBtcCompact } from "@/lib/bitcoin/units";
 import { shortTxid } from "@/lib/format";
+import { isLayoutFixed } from "@/lib/graph/model";
 
 export function AddressPanel({ address }: { address: string }) {
   // Remount when address changes so draft label + UTXO fetch reset cleanly.
@@ -26,6 +28,7 @@ function AddressPanelInner({ address }: { address: string }) {
   const node = useGraphStore((s) => s.nodes.get(address));
   const expandAddress = useGraphStore((s) => s.expandAddress);
   const pinAddress = useGraphStore((s) => s.pinAddress);
+  const releaseNodePosition = useGraphStore((s) => s.releaseNodePosition);
   const clearSelection = useGraphStore((s) => s.clearSelection);
   const loadTransaction = useGraphStore((s) => s.loadTransaction);
   const links = useGraphStore((s) => s.links);
@@ -122,6 +125,17 @@ function AddressPanelInner({ address }: { address: string }) {
             <Pin className="size-3.5" />
             {node?.pinned ? "Unpin" : "Pin"}
           </button>
+          {node && isLayoutFixed(node) && (
+            <button
+              type="button"
+              onClick={() => releaseNodePosition(address)}
+              className="inline-flex items-center gap-1.5 rounded-md border border-panel-border px-2 py-1.5 text-xs hover:border-accent/40"
+              title="Allow the force layout to move this node again"
+            >
+              <Move className="size-3.5" />
+              Free position
+            </button>
+          )}
         </div>
 
         <div className="space-y-1.5">

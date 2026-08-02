@@ -40,7 +40,7 @@ export function AppShell() {
         </div>
         <div className="hidden items-center gap-1.5 text-[11px] text-muted sm:flex">
           <Info className="size-3.5" />
-          Click node = address · click edge = transaction · Esc closes panel
+          Drag to place · double-click to free · click edge = tx · Esc closes
         </div>
       </header>
 

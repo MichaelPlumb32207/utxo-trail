@@ -72,6 +72,8 @@ src/
 
 **Graph library:** `react-force-graph-2d` via `next/dynamic({ ssr: false })`.
 
+**Layout stickiness:** On drag end, set node `fx`/`fy` (force-graph fixed coords) **and** persist on `GraphNode` in the store. Merge must preserve `fx`/`fy` so expand/re-fetch does not free user placements. Double-click or `releaseNodePosition` / `releaseAllPositions` clears them.
+
 ### Future seams (keep open)
 
 - Address clustering / entity labels / common-input ownership

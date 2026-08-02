@@ -55,6 +55,12 @@ interface GraphState {
   selectTx: (txid: string | null) => void;
   clearSelection: () => void;
   pinAddress: (id: string, pinned?: boolean) => void;
+  /** Fix a node at canvas coordinates after the user drags it. */
+  fixNodePosition: (id: string, x: number, y: number) => void;
+  /** Let the force layout move a node again. */
+  releaseNodePosition: (id: string) => void;
+  /** Clear all user-fixed layout positions. */
+  releaseAllPositions: () => void;
   clearGraph: () => void;
 
   addAddresses: (
@@ -125,6 +131,42 @@ export const useGraphStore = create<GraphState>((set, get) => ({
       const nodes = new Map(s.nodes);
       const n = nodes.get(id);
       if (n) nodes.set(id, { ...n, pinned });
+      return { nodes, ...snapshotLists(nodes, s.links) };
+    }),
+
+  fixNodePosition: (id, x, y) =>
+    set((s) => {
+      const nodes = new Map(s.nodes);
+      const n = nodes.get(id);
+      if (!n) return s;
+      nodes.set(id, { ...n, fx: x, fy: y });
+      return { nodes, ...snapshotLists(nodes, s.links) };
+    }),
+
+  releaseNodePosition: (id) =>
+    set((s) => {
+      const nodes = new Map(s.nodes);
+      const n = nodes.get(id);
+      if (!n || (n.fx == null && n.fy == null)) return s;
+      const { fx: _fx, fy: _fy, ...rest } = n;
+      nodes.set(id, rest);
+      return { nodes, ...snapshotLists(nodes, s.links) };
+    }),
+
+  releaseAllPositions: () =>
+    set((s) => {
+      let changed = false;
+      const nodes = new Map<string, GraphNode>();
+      for (const [id, n] of s.nodes) {
+        if (n.fx != null || n.fy != null) {
+          const { fx: _fx, fy: _fy, ...rest } = n;
+          nodes.set(id, rest);
+          changed = true;
+        } else {
+          nodes.set(id, n);
+        }
+      }
+      if (!changed) return s;
       return { nodes, ...snapshotLists(nodes, s.links) };
     }),
 

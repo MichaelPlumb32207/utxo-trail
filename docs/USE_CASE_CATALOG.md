@@ -47,6 +47,16 @@ Click edge or open txid → full vin/vout, fee rate, follow actions.
 
 ---
 
+## UC-006 — Sticky node placement
+
+Researcher drags addresses into a custom layout that survives expand.
+
+**UC-006·H** Drag a node and release → dashed ring; node does not drift when expanding another address.  
+**UC-006·E1** Double-click placed node → ring clears; layout may move it again.  
+**UC-006·E2** Free layout in toolbar → all `fx`/`fy` cleared.
+
+---
+
 ## UC-005 — Label and export
 
 **UC-005·H** Save label → appears on node; JSON export includes label.  

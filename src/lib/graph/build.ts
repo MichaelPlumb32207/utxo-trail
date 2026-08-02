@@ -197,6 +197,9 @@ export function mergeNode(
     pinned: existing.pinned || incoming.pinned,
     expanded: existing.expanded || incoming.expanded,
     hop: Math.min(existing.hop, incoming.hop),
+    // Keep user-dragged layout unless the incoming node explicitly sets fx/fy.
+    fx: incoming.fx !== undefined ? incoming.fx : existing.fx,
+    fy: incoming.fy !== undefined ? incoming.fy : existing.fy,
   };
 }
 

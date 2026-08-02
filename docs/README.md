@@ -9,6 +9,7 @@ Interactive Bitcoin **UTXO flow explorer** — research address and transaction 
 - Expand forward (outflows) and backward (inflows) with amount / fan-out caps
 - Transaction detail panel with follow-input / follow-output
 - Manual labels (local only) and JSON/CSV export
+- Drag nodes to place them; positions stick while you research (double-click / Free layout to release)
 
 ## Live
 

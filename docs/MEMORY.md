@@ -24,6 +24,7 @@ Durable project facts for future sessions (not a chat log).
 - Graph pure logic in `lib/graph/*` so tests need no network
 - `react-force-graph-2d` must load with `dynamic(..., { ssr: false })`
 - Labels: zustand `persist` → `localStorage` key `utxo-trail-labels`
+- **Sticky layout:** drag end → store `fx`/`fy`; merge preserves them; double-click frees
 
 ## Reuse
 

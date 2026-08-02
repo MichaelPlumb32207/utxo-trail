@@ -20,7 +20,9 @@ A browser tool for exploring **how bitcoin moved** between addresses. It is **no
 |---|---|
 | Click an **address node** | Right panel: balance, UTXOs, connected flows, expand controls |
 | Click a **link (edge)** | Right panel: full transaction inputs/outputs, fee rate |
-| Drag node | Reposition |
+| **Drag node** | Place it — it **stays put** (dashed ring). Research layout sticks while you expand. |
+| **Double-click** a placed node | Free it so the force layout can move it again |
+| **Free layout** (left rail) | Release all placed positions at once |
 | Scroll / pinch | Zoom |
 | Drag background | Pan |
 | **Esc** | Close the right panel |

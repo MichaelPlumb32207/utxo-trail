@@ -150,4 +150,12 @@ describe("mergeNode", () => {
     expect(m.fundedSats).toBe(500);
     expect(m.expanded).toBe(true);
   });
+
+  it("preserves user-fixed layout coordinates across expand merges", () => {
+    const a = emptyNode(focus, { role: "seed", hop: 0, fx: 120, fy: -40 });
+    const b = emptyNode(focus, { role: "seed", hop: 0, fundedSats: 900, expanded: true });
+    const m = mergeNode(a, b);
+    expect(m.fx).toBe(120);
+    expect(m.fy).toBe(-40);
+  });
 });

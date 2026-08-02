@@ -4,6 +4,7 @@ import {
   Download,
   Eraser,
   Filter,
+  Move,
 } from "lucide-react";
 import { useGraphStore } from "@/stores/graphStore";
 import { useLabelsStore } from "@/stores/labelsStore";
@@ -22,12 +23,17 @@ export function Toolbar() {
   const filters = useGraphStore((s) => s.filters);
   const setFilters = useGraphStore((s) => s.setFilters);
   const clearGraph = useGraphStore((s) => s.clearGraph);
+  const releaseAllPositions = useGraphStore((s) => s.releaseAllPositions);
   const nodes = useGraphStore((s) => s.nodes);
   const links = useGraphStore((s) => s.links);
   const labels = useLabelsStore((s) => s.labels);
   const status = useGraphStore((s) => s.status);
   const error = useGraphStore((s) => s.error);
   const loading = useGraphStore((s) => s.loading);
+
+  const fixedCount = [...nodes.values()].filter(
+    (n) => n.fx != null && n.fy != null,
+  ).length;
 
   function exportJson() {
     const data = toExportJson(
@@ -124,6 +130,16 @@ export function Toolbar() {
         </button>
         <button
           type="button"
+          onClick={() => releaseAllPositions()}
+          disabled={fixedCount === 0}
+          title="Let the force layout move all nodes again"
+          className="inline-flex items-center gap-1.5 rounded-md border border-panel-border px-2 py-1.5 text-xs text-foreground hover:border-accent/40"
+        >
+          <Move className="size-3.5" />
+          Free layout{fixedCount > 0 ? ` (${fixedCount})` : ""}
+        </button>
+        <button
+          type="button"
           onClick={() => clearGraph()}
           disabled={nodes.size === 0 && !error}
           className="inline-flex items-center gap-1.5 rounded-md border border-panel-border px-2 py-1.5 text-xs text-muted hover:border-danger/40 hover:text-danger"
@@ -132,6 +148,10 @@ export function Toolbar() {
           Clear
         </button>
       </div>
+      <p className="text-[11px] leading-snug text-muted">
+        Drag a node to place it — it stays put. Double-click a placed node (or
+        Free layout) to release.
+      </p>
 
       <div className="text-[11px] text-muted">
         {nodes.size} nodes · {links.size} links

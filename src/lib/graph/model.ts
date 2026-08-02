@@ -30,11 +30,26 @@ export interface GraphNode {
   /** Total funded on chain (lifetime inflow proxy for sizing). */
   fundedSats: number;
   txCount: number;
+  /**
+   * Investigation bookmark (highlight / keep in focus list).
+   * Distinct from layout fixation via `fx`/`fy`.
+   */
   pinned: boolean;
   /** True once we have fetched txs for this address at least once. */
   expanded: boolean;
   /** Hop distance from nearest seed (0 = seed). */
   hop: number;
+  /**
+   * Force-graph fixed coordinates. When set, the simulation will not
+   * move the node — used so drag-and-drop layout sticks during research.
+   */
+  fx?: number;
+  fy?: number;
+}
+
+/** True when the user has placed this node and it should stay put. */
+export function isLayoutFixed(node: GraphNode): boolean {
+  return node.fx != null && node.fy != null;
 }
 
 export interface GraphLink {
