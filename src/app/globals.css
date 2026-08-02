@@ -1,0 +1,89 @@
+@import "tailwindcss";
+
+:root {
+  --background: #07090d;
+  --foreground: #e8edf5;
+  --panel: rgba(14, 18, 28, 0.92);
+  --panel-border: rgba(120, 140, 180, 0.18);
+  --muted: #8b97ad;
+  --accent: #f7931a;
+  --accent-strong: #ffb14a;
+  --accent-dim: rgba(247, 147, 26, 0.14);
+  --danger: #f87171;
+  --danger-dim: rgba(248, 113, 113, 0.16);
+  --success: #34d399;
+  --link: #60a5fa;
+  --node-external: #64748b;
+  --node-seed: #38bdf8;
+  --node-attacker: #f87171;
+  --node-victim: #fbbf24;
+  --node-pinned: #a78bfa;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-panel: var(--panel);
+  --color-panel-border: var(--panel-border);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-dim: var(--accent-dim);
+  --color-danger: var(--danger);
+  --color-danger-dim: var(--danger-dim);
+  --color-success: var(--success);
+  --color-link: var(--link);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  margin: 0;
+}
+
+/* Subtle grid behind the graph */
+.graph-bg {
+  background-color: #07090d;
+  background-image:
+    radial-gradient(ellipse 80% 60% at 50% 40%, rgba(247, 147, 26, 0.06), transparent 60%),
+    linear-gradient(rgba(100, 116, 139, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(100, 116, 139, 0.06) 1px, transparent 1px);
+  background-size: auto, 32px 32px, 32px 32px;
+}
+
+/* Dense mono for addresses / amounts */
+.mono {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-variant-ligatures: none;
+}
+
+/* Scrollbars in panels */
+.panel-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.35) transparent;
+}
+
+.panel-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+.panel-scroll::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.35);
+  border-radius: 4px;
+}
+
+button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
