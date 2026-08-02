@@ -2,6 +2,13 @@
 
 Last Updated: 2026-08-02
 
+## 2026-08-02 — Production deploy
+
+- GitHub: https://github.com/MichaelPlumb32207/utxo-trail (public)
+- Vercel team **Liberty Concierge**, project `utxo-trail`, framework Next.js, auto-deploy from `main`
+- Production URL: https://utxo-trail.vercel.app/
+- First deploy failed (project created without Next framework → “No Output Directory named public”); fixed via API framework=`nextjs`, redeploy Ready
+
 ## 2026-08-02 — v0.1.0 MVP foundation
 
 - Scaffolded Next.js 16 + Tailwind v4 + TypeScript project as **utxo-trail**

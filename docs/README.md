@@ -10,6 +10,12 @@ Interactive Bitcoin **UTXO flow explorer** — research address and transaction 
 - Transaction detail panel with follow-input / follow-output
 - Manual labels (local only) and JSON/CSV export
 
+## Live
+
+**Production:** [https://utxo-trail.vercel.app/](https://utxo-trail.vercel.app/)  
+**GitHub:** [MichaelPlumb32207/utxo-trail](https://github.com/MichaelPlumb32207/utxo-trail)  
+Auto-deploys from `main` on Vercel team **Liberty Concierge**.
+
 ## Quick start
 
 ```bash

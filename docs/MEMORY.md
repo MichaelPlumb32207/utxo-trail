@@ -10,6 +10,13 @@ Durable project facts for future sessions (not a chat log).
 - Scope: public Bitcoin flow research UI — not a wallet
 - First practical dataset: Coldcard July 2026 seed-gen incident consolidators
 
+## Deploy
+
+- **GitHub:** `MichaelPlumb32207/utxo-trail` (public)
+- **Vercel:** Liberty Concierge project `utxo-trail` · auto-deploy from `main`
+- **Production:** https://utxo-trail.vercel.app/
+- No required env vars for MVP (optional `NEXT_PUBLIC_MEMPOOL_API`)
+
 ## Technical choices
 
 - Client-side mempool.space; `NEXT_PUBLIC_MEMPOOL_API` for alternate Esplora base

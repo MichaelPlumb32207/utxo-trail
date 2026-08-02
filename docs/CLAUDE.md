@@ -19,6 +19,8 @@ Motivating dataset: known public consolidation addresses from the **July 2026 Co
 
 **Stack:** Next.js 16 (App Router) · React 19 · TypeScript · Tailwind v4 · Zustand · `react-force-graph-2d` · lucide-react · vitest. Client-side first against mempool.space (Esplora-compatible). No database, no auth.
 
+**Deploy:** GitHub `MichaelPlumb32207/utxo-trail` → Vercel Liberty Concierge project `utxo-trail` → https://utxo-trail.vercel.app/ (auto-deploy on push to `main`).
+
 ## Sibling reuse
 
 Patterns and thin modules adapted from **`../satchel-wallet`** (do not create a monorepo package yet):

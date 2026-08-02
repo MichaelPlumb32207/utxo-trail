@@ -2,6 +2,9 @@
 
 Interactive Bitcoin UTXO flow explorer for researching address and transaction histories.
 
+**Live:** https://utxo-trail.vercel.app/  
+**Repo:** https://github.com/MichaelPlumb32207/utxo-trail
+
 ```bash
 npm install
 npm run dev

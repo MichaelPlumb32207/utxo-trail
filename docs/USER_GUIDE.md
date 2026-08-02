@@ -9,7 +9,7 @@ A browser tool for exploring **how bitcoin moved** between addresses. It is **no
 
 ## Getting started
 
-1. Run the app (`npm run dev`) or open the deployed site when available.
+1. Open **https://utxo-trail.vercel.app/** (production) or run locally with `npm run dev`.
 2. Either:
    - Click **Load Coldcard investigation** for known public consolidators from the July 2026 incident, or
    - Paste one or more **mainnet addresses** (and/or 64-character **txids**) into the left panel and click **Explore**.
